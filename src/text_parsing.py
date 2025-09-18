@@ -6,4 +6,4 @@ def parse(text):
     footer_cutoff = text.find("***", header_cutoff + 1)
     print(footer_cutoff)
 
-    return [char for char in (text[header_cutoff:footer_cutoff].split('\n\n')) if char != '']
+    return [char for char in (text[header_cutoff:footer_cutoff].split('\n\n')) if char.strip() != '']
