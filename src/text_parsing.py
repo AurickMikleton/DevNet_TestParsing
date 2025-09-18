@@ -1,2 +1,2 @@
 def parse(text):
-    return text.split('\n')
+    return text.split('\n\n')
