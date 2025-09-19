@@ -8,7 +8,6 @@ import text_parsing
 
 
 def main():
-    print(len(sys.argv))
     if len(sys.argv) != 3:
         show_docs()
     if sys.argv[1] != "parse":
