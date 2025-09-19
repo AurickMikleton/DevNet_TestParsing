@@ -15,11 +15,14 @@ def parse(text):
     count = Counter(words)
     avg_scentence_len = len(words) / len(scentences)
     word_order = count.most_common()
-    print(f"NAME \\ {word_order[0][0]}"\
-            " {word_order[1][0]}"\
-            " {word_order[2][0]}"\
-            " {word_order[3][0]}"\
-            " {word_order[4][0]}"\
-            " \\ {avg_scentence_len}"
+    print(f"NAME",
+            "\\",
+            word_order[0][0],
+            word_order[1][0],
+            word_order[2][0],
+            word_order[3][0],
+            word_order[4][0],
+            "\\",
+            avg_scentence_len
           )
 
