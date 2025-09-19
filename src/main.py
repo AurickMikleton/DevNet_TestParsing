@@ -18,7 +18,7 @@ def main():
         print("Invalid file path")
         quit()
     book_file = open(sys.argv[2], 'r', encoding='utf-8')
-    print(text_parsing.parse(book_file.read()))
+    text_parsing.parse(book_file.read())
     book_file.close()
 
 
