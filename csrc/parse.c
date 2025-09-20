@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 
 #define BUFFER_SIZE 64 // longest english word is 45 letters, this is sufficient for reasonable cases
 #define HASH_TABLE_SIZE 255 // bigger number = faster look ups and more memmory use
@@ -16,6 +17,7 @@ typedef struct word {
 } word;
 
 word *hashTable[HASH_TABLE_SIZE];
+int scentences = 0;
 
 unsigned int hash(char* text) {
     int length = strnlen(text, BUFFER_SIZE);
@@ -84,14 +86,37 @@ void freeTable() {
     }
 }
 
+bool endOfWord(char c) {
+    if (c == ' ' || c == ',' || c == '\n') return true;
+    if (c == '.' || c == '!' || c == '?') {
+        scentences += 1;
+        return true;
+    }
+    return false;
+}
+
 int main() {
     FILE *file;
     fopen_s(&file, "foo.txt", "r");
     if (file == NULL) return 1;
 
+    char currentWord[BUFFER_SIZE];
+
     char c;
+    int i = 0;
     while ((c = fgetc(file)) != EOF) {
-        hashTableAddWord(&c);
+        c = tolower(c);
+        if (endOfWord(c)) {
+            if (i==0) continue;
+            currentWord[i] = '\0';
+            //printf("%s\n", currentWord);
+            hashTableAddWord(currentWord);
+            //memset(currentWord, 0, BUFFER_SIZE);
+            i = 0;
+            continue;
+        }
+        currentWord[i] = c;
+        i+=1;
     }
     printTable();
     freeTable();
