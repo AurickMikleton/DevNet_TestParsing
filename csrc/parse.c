@@ -9,6 +9,8 @@
 
 #define BUFFER_SIZE 64 // longest english word is 45 letters, this is sufficient for reasonable cases
 #define HASH_TABLE_SIZE 255 // bigger number = faster look ups and more memmory use
+#define FNV_PRIME 0x100000001b3
+#define FNV_OFFSET_BASIS 0xcbf29ce484222325
 
 typedef struct word {
     char text[BUFFER_SIZE];
@@ -17,16 +19,18 @@ typedef struct word {
 } word;
 
 word *hashTable[HASH_TABLE_SIZE];
-int scentences = 0;
+int scentenceCount = 0;
+int wordCount = 0;
 
+// FNV - 1 hash
 unsigned int hash(char* text) {
     int length = strnlen(text, BUFFER_SIZE);
-    unsigned int hashValue = 0;
+    unsigned long long hashValue = FNV_OFFSET_BASIS;
     for (int i = 0; i < length; i++) {
-        hashValue += text[i];
-        hashValue = (hashValue * text[i]) % HASH_TABLE_SIZE;
+        hashValue *= FNV_PRIME;
+        hashValue ^= text[i];
     }
-    return hashValue;
+    return hashValue % HASH_TABLE_SIZE;
 }
 
 word *makeWord(char* text) {
@@ -35,7 +39,7 @@ word *makeWord(char* text) {
     return output;
 }
 
-// TODO: add malloc
+// TODO: pass in index to remove redundant process
 void hashTableInsert(word *w) {
     if (w == NULL) return;
     int index = hash(w->text);
@@ -89,38 +93,37 @@ void freeTable() {
 bool endOfWord(char c) {
     if (c == ' ' || c == ',' || c == '\n') return true;
     if (c == '.' || c == '!' || c == '?') {
-        scentences += 1;
+        scentenceCount += 1;
         return true;
     }
     return false;
 }
 
-int main() {
-    FILE *file;
-    fopen_s(&file, "foo.txt", "r");
-    if (file == NULL) return 1;
-
+void chunkWords(FILE *file) {
     char currentWord[BUFFER_SIZE];
-
     char c;
     int i = 0;
     while ((c = fgetc(file)) != EOF) {
         c = tolower(c);
         if (endOfWord(c)) {
-            if (i==0) continue;
+            if (i == 0) continue;
             currentWord[i] = '\0';
-            //printf("%s\n", currentWord);
             hashTableAddWord(currentWord);
-            //memset(currentWord, 0, BUFFER_SIZE);
             i = 0;
             continue;
         }
         currentWord[i] = c;
         i+=1;
     }
+}
+
+int main() {
+    FILE *file;
+    fopen_s(&file, "foo.txt", "r");
+    if (file == NULL) return 1;
+    chunkWords(file);
     printTable();
     freeTable();
-
     fclose(file);
     return 0;
 }
