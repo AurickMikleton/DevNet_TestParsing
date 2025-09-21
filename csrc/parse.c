@@ -23,6 +23,7 @@ word *hashTable[HASH_TABLE_SIZE];
 int scentenceCount = 0;
 int wordCount = 0;
 int uniqueWords = 0;
+word *biggest[5] = {0};
 
 // FNV - 1 hash
 uint64_t hash(char* text) {
@@ -35,6 +36,19 @@ uint64_t hash(char* text) {
     return hashValue % HASH_TABLE_SIZE;
 }
 
+void printWord(word *w) {
+    printf("('%s', %d)\n", w->text, w->instances);
+}
+
+void sort(word *w) {
+    if (w->instances < biggest[5 - 1]->instances) return;
+    // check for banned word here
+    for (int i = 5 - 1; i > 0; i--) {
+        printWord(biggest[i]);
+    }
+    return;
+}
+
 word *makeWord(char* text) {
     word *output = (word*) malloc(sizeof(word));
     strcpy_s(output->text, BUFFER_SIZE, text);
@@ -42,10 +56,8 @@ word *makeWord(char* text) {
     return output;
 }
 
-// TODO: pass in index to remove redundant process
-void hashTableInsert(word *w) {
-    if (w == NULL) return;
-    int index = hash(w->text);
+void hashTableInsert(word *w, int index) {
+    if (w == NULL) return; // likely redundant, to be removed later
     w->next = hashTable[index];
     hashTable[index] = w;
 }
@@ -59,16 +71,13 @@ void hashTableAddWord(char *text) {
     }
     if (tmp == NULL) {
         word *newWord = makeWord(text);
-        newWord->instances = 1;
+        newWord->instances = 0;
         newWord->next = NULL;
-        hashTableInsert(newWord);
-    } else {
-        tmp->instances += 1;
+        hashTableInsert(newWord, index);
+        tmp = newWord;
     }
-}
-
-void printWord(word *w) {
-    printf("('%s', %d)\n", w->text, w->instances);
+    tmp->instances += 1;
+    //sort(tmp);
 }
 
 void printTable() {
@@ -92,37 +101,6 @@ void freeTable() {
             tmp = next;
         }
     }
-}
-
-int compare(const void* a, const void* b) {
-    int output = ((word*)b)->instances - ((word*)a)->instances;
-    word *wordA = (word*)a;
-    word *wordB = (word*)b;
-    printWord(wordB);
-    printf("output: %d\n", wordB->instances);
-    return (wordB->instances - wordA->instances);
-}
-
-void sort() {
-    int n = 0;
-    word **array = (word**) malloc(sizeof(word*) * uniqueWords);
-    for (int i = 0; i < HASH_TABLE_SIZE; i++) {
-        if (hashTable[i] == NULL) continue;
-        word *tmp = hashTable[i];
-        while (tmp != NULL) {
-            array[n] = tmp;
-            n += 1;
-            //printf("%d\n", tmp->instances);
-            tmp = tmp->next;
-        }
-    }
-    printf("%d\n", uniqueWords);
-    printf("%d\n", n);
-    qsort(*array, uniqueWords, sizeof(word*), compare);
-    for (int i = 0; i < uniqueWords; i++) {
-        printWord(array[i]);
-    }
-    free(array);
 }
 
 bool endOfWord(char c) {
@@ -157,8 +135,8 @@ int main() {
     fopen_s(&file, "bar.txt", "r");
     if (file == NULL) return 1;
     chunkWords(file);
-    sort();
-    //printTable();
+    //sort();
+    printTable();
     freeTable();
     fclose(file);
     return 0;
