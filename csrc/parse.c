@@ -36,19 +36,6 @@ uint64_t hash(char* text) {
     return hashValue % HASH_TABLE_SIZE;
 }
 
-void printWord(word *w) {
-    printf("('%s', %d)\n", w->text, w->instances);
-}
-
-void sort(word *w) {
-    if (w->instances < biggest[5 - 1]->instances) return;
-    // check for banned word here
-    for (int i = 5 - 1; i > 0; i--) {
-        printWord(biggest[i]);
-    }
-    return;
-}
-
 word *makeWord(char* text) {
     word *output = (word*) malloc(sizeof(word));
     strcpy_s(output->text, BUFFER_SIZE, text);
@@ -77,10 +64,24 @@ void hashTableAddWord(char *text) {
         tmp = newWord;
     }
     tmp->instances += 1;
-    //sort(tmp); likely final placement of sort
+}
+
+void printWord(word *w) {
+    printf("('%s', %d)\n", w->text, w->instances);
 }
 
 void printTable() {
+    for (int i = 0; i < HASH_TABLE_SIZE; i++) {
+        if (hashTable[i] == NULL) continue;
+        word *tmp = hashTable[i];
+        while (tmp != NULL) {
+            printWord(tmp);
+            tmp = tmp->next;
+        }
+    }
+}
+
+void sort() {
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
         if (hashTable[i] == NULL) continue;
         word *tmp = hashTable[i];
@@ -136,6 +137,7 @@ int main(int argc, char** argv) {
     if (file == NULL) return 1;
     chunkWords(file);
     printTable();
+    //sort(); // likely final placement of sort
     freeTable();
     fclose(file);
     return 0;
