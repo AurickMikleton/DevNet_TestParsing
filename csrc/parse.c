@@ -22,7 +22,7 @@ typedef struct word {
 word *hashTable[HASH_TABLE_SIZE];
 int scentenceCount = 0;
 int wordCount = 0;
-int uniqueWords = 0;
+int uniqueWords = 0; // currently unused
 word *biggest[5] = {0};
 
 // FNV - 1 hash
@@ -52,7 +52,7 @@ void sort(word *w) {
 word *makeWord(char* text) {
     word *output = (word*) malloc(sizeof(word));
     strcpy_s(output->text, BUFFER_SIZE, text);
-    uniqueWords += 1;
+    //uniqueWords += 1;
     return output;
 }
 
@@ -77,7 +77,7 @@ void hashTableAddWord(char *text) {
         tmp = newWord;
     }
     tmp->instances += 1;
-    //sort(tmp);
+    //sort(tmp); likely final placement of sort
 }
 
 void printTable() {
@@ -135,7 +135,6 @@ int main(int argc, char** argv) {
     fopen_s(&file, argv[1], "r");
     if (file == NULL) return 1;
     chunkWords(file);
-    //sort();
     printTable();
     freeTable();
     fclose(file);
