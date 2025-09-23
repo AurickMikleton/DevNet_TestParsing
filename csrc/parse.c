@@ -1,3 +1,5 @@
+#define __STDC_WANT_LIB_EXT1__ 1
+
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,6 +9,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdint.h>
+
 
 #define BUFFER_SIZE 64 // longest english word is 45 letters, this is sufficient for reasonable cases
 #define HASH_TABLE_SIZE 1024 // bigger number = faster look ups and more memmory use
@@ -127,13 +130,13 @@ void chunkWords(FILE *file) {
             continue;
         }
         currentWord[i] = c;
-        i+=1;
+        i++;
     }
 }
 
 int main(int argc, char** argv) {
     FILE *file;
-    fopen_s(&file, argv[1], "r");
+    file = fopen(argv[1], "r");
     if (file == NULL) return 1;
     chunkWords(file);
     printTable();
