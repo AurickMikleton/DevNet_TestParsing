@@ -1,5 +1,3 @@
-#define __STDC_WANT_LIB_EXT1__ 1
-
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +7,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdint.h>
-
 
 #define BUFFER_SIZE 64 // longest english word is 45 letters, this is sufficient for reasonable cases
 #define HASH_TABLE_SIZE 1024 // bigger number = faster look ups and more memmory use
@@ -41,7 +38,7 @@ uint64_t hash(char* text) {
 
 word *makeWord(char* text) {
     word *output = (word*) malloc(sizeof(word));
-    strcpy_s(output->text, BUFFER_SIZE, text);
+    strcpy(output->text, text);
     //uniqueWords += 1;
     return output;
 }
