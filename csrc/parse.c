@@ -12,6 +12,7 @@
 #define HASH_TABLE_SIZE 1024 // bigger number = faster look ups and more memmory use
 #define FNV_PRIME 0x100000001b3
 #define FNV_OFFSET_BASIS 0xcbf29ce484222325
+#define SORT_SIZE 5
 
 typedef struct word {
     char text[BUFFER_SIZE];
@@ -39,7 +40,7 @@ uint64_t hash(char* text) {
 word *makeWord(char* text) {
     word *output = (word*) malloc(sizeof(word));
     strcpy(output->text, text);
-    //uniqueWords += 1;
+    uniqueWords += 1;
     return output;
 }
 
@@ -67,6 +68,7 @@ void hashTableAddWord(char *text) {
 }
 
 void printWord(word *w) {
+    if (w == NULL) return;
     printf("('%s', %d)\n", w->text, w->instances);
 }
 
@@ -82,14 +84,33 @@ void printTable() {
 }
 
 void sort() {
+    word **array = (word**) malloc(sizeof(word*) * SORT_SIZE);
+    memset(array, 0, SORT_SIZE * sizeof(word*));
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
         if (hashTable[i] == NULL) continue;
         word *tmp = hashTable[i];
         while (tmp != NULL) {
-            printWord(tmp);
+            if (array[0] == NULL) {
+                for (int n = 0; n < SORT_SIZE; n++) {
+                    array[n] = tmp;
+                }
+            } else if (array[0]->instances <= tmp->instances) {
+                array[0] = tmp;
+                for (int n = 1; n < SORT_SIZE; n++) {
+                    if (array[n]->instances < tmp->instances) {
+                        continue;
+                    }
+                    array[n] = tmp;
+                    break;
+                }
+            }
             tmp = tmp->next;
         }
     }
+    for (int i = 0; i < SORT_SIZE; i++) {
+        printWord(array[i]);
+    }
+    free(array);
 }
 
 void freeTable() {
@@ -136,8 +157,8 @@ int main(int argc, char** argv) {
     file = fopen(argv[1], "r");
     if (file == NULL) return 1;
     chunkWords(file);
-    printTable();
-    //sort(); // likely final placement of sort
+    //printTable();
+    sort(); // likely final placement of sort
     freeTable();
     fclose(file);
     return 0;
