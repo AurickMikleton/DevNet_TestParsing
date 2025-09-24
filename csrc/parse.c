@@ -83,6 +83,23 @@ void printTable() {
     }
 }
 
+void innerSort(word** array, word* w) {
+    if (array[0] == NULL) {
+        for (int n = 0; n < SORT_SIZE; n++) {
+            array[n] = w;
+        }
+    } else if (array[0]->instances <= w->instances) {
+        array[0] = w;
+        for (int n = 1; n < SORT_SIZE; n++) {
+            if (array[n]->instances < w->instances) {
+                continue;
+            }
+            array[n] = w;
+            break;
+        }
+    }
+}
+
 void sort() {
     word **array = (word**) malloc(sizeof(word*) * SORT_SIZE);
     memset(array, 0, SORT_SIZE * sizeof(word*));
@@ -90,20 +107,7 @@ void sort() {
         if (hashTable[i] == NULL) continue;
         word *tmp = hashTable[i];
         while (tmp != NULL) {
-            if (array[0] == NULL) {
-                for (int n = 0; n < SORT_SIZE; n++) {
-                    array[n] = tmp;
-                }
-            } else if (array[0]->instances <= tmp->instances) {
-                array[0] = tmp;
-                for (int n = 1; n < SORT_SIZE; n++) {
-                    if (array[n]->instances < tmp->instances) {
-                        continue;
-                    }
-                    array[n] = tmp;
-                    break;
-                }
-            }
+            innerSort(array, tmp);
             tmp = tmp->next;
         }
     }
