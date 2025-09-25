@@ -83,32 +83,37 @@ void printTable() {
     }
 }
 
-void insertionSort(word** array, word* w, int i) {
-    int j = i - 1;
-    while (j >= 0 && array[j] > w) {
-        array[j + 1] = array[j];
-        j--;
-    }
-    array[j + 1] = w;
-}
-
 void sort() {
-    word **array = (word**) calloc(uniqueWords, sizeof(word*));
+    word* first = NULL;
+    word* linkHead = NULL;
+    word *prev = NULL;
     //memset(array, 0, SORT_SIZE * sizeof(word*));
-    int n = 0;
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
         if (hashTable[i] == NULL) continue;
         word *tmp = hashTable[i];
+        if (first == NULL) {
+            first = tmp;
+        }
+
+        puts("a");
+        if (linkHead != NULL) {
+            linkHead->next = tmp;
+            puts("b");
+        }
+        puts("c");
         while (tmp != NULL) {
-            n++;
-            insertionSort(array, tmp, n);
+            puts("d");
+            prev = tmp;
             tmp = tmp->next;
         }
+        linkHead = prev;
     }
-    for (int i = 0; i < uniqueWords; i++) {
-        printWord(array[i]);
+    // test list
+    word* tmp = first;
+    while (tmp != NULL) {
+        printWord(tmp);
+        tmp = tmp->next;
     }
-    free(array);
 }
 
 void freeTable() {
