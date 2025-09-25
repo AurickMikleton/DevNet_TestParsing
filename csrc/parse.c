@@ -141,38 +141,24 @@ void sort() {
     word* first = NULL;
     word* linkHead = NULL;
     word *prev = NULL;
-    //memset(array, 0, SORT_SIZE * sizeof(word*));
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
         if (hashTable[i] == NULL) continue;
         word *tmp = hashTable[i];
-        if (first == NULL) {
-            first = tmp;
-        }
-
-        if (linkHead != NULL) {
-            linkHead->next = tmp;
-        }
+        if (first == NULL) first = tmp;
+        if (linkHead != NULL) linkHead->next = tmp;
         while (tmp != NULL) {
             prev = tmp;
             tmp = tmp->next;
         }
         linkHead = prev;
     }
-    // test list
     word* tmp = bubbleSort(first);
-    //int i = 0;
-    //while (tmp != NULL && i > 5) {
-    //    printWord(tmp);
-    //    tmp = tmp->next;
-	//i++;
-    //}
-    //while (tmp != NULL) {
-    //    word *next = tmp->next;
-    //    free(tmp);
-    //    tmp = next;
-    for (int i = 0; i < 5 && tmp != NULL; i++) {
+    int i = 0;
+    while (i < 5 && tmp != NULL) {
+        if (false) continue; // check if word is on "banned list"
         printWord(tmp);
         tmp = tmp->next;
+        i++;
     }
 }
 
