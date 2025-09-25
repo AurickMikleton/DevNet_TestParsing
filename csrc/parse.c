@@ -83,6 +83,60 @@ void printTable() {
     }
 }
 
+word *bubbleSort(word *head) {
+    word *currNode = head;
+    int len = uniqueWords;
+    int itr = 0;
+    int swapped;
+
+    // Iterating over the whole linked list
+    while (itr < len) {
+        word *traverseNode = head;
+        word *prevNode = head;
+        swapped = 0;
+
+        while (traverseNode->next != NULL) {
+
+            // Temporary pointer to store the next
+            // pointer of traverseNode
+            word *ptr = traverseNode->next;
+            if (traverseNode->instances > ptr->instances) {
+                swapped = 1;
+                if (traverseNode == head) {
+
+                    // Performing swap operations and
+                    // updating the head of the linked list
+                    traverseNode->next = ptr->next;
+                    ptr->next = traverseNode;
+                    prevNode = ptr;
+                    head = prevNode;
+                }
+                else {
+
+                    // Performing swap operation
+                    traverseNode->next = ptr->next;
+                    ptr->next = traverseNode;
+                    prevNode->next = ptr;
+                    prevNode = ptr;
+                }
+                continue;
+            }
+            prevNode = traverseNode;
+            traverseNode = traverseNode->next;
+        }
+
+        // If no swap occurred, break the loop
+        if (!swapped) {
+            break;
+        }
+
+        ++itr;
+    }
+
+    // Returning the head of the linked list
+    return head;
+}
+
 void sort() {
     word* first = NULL;
     word* linkHead = NULL;
@@ -109,7 +163,7 @@ void sort() {
         linkHead = prev;
     }
     // test list
-    word* tmp = first;
+    word* tmp = bubbleSort(first);
     while (tmp != NULL) {
         printWord(tmp);
         tmp = tmp->next;
