@@ -137,7 +137,7 @@ word *bubbleSort(word *head) {
     return head;
 }
 
-void sort() {
+word *sort() {
     word* first = NULL;
     word* linkHead = NULL;
     word *prev = NULL;
@@ -160,6 +160,7 @@ void sort() {
         tmp = tmp->next;
         i++;
     }
+    return first;
 }
 
 void freeTable() {
@@ -171,6 +172,15 @@ void freeTable() {
             free(tmp);
             tmp = next;
         }
+    }
+}
+
+void freeList(word *first) {
+    word *tmp = first;
+    while (tmp != NULL) {
+        word *next = tmp->next;
+        free(tmp);
+        tmp = next;
     }
 }
 
@@ -206,9 +216,10 @@ int main(int argc, char** argv) {
     file = fopen(argv[1], "r");
     if (file == NULL) return 1;
     chunkWords(file);
-    //printTable();
-    sort(); // likely final placement of sort
-    freeTable();
     fclose(file);
+    //printTable();
+    word* first = sort();
+    freeList(first);
+    //freeTable();
     return 0;
 }
