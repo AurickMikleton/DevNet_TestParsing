@@ -160,16 +160,19 @@ void sort() {
     }
     // test list
     word* tmp = bubbleSort(first);
-    int i = 0;
-    while (tmp != NULL && i > 5) {
+    //int i = 0;
+    //while (tmp != NULL && i > 5) {
+    //    printWord(tmp);
+    //    tmp = tmp->next;
+	//i++;
+    //}
+    //while (tmp != NULL) {
+    //    word *next = tmp->next;
+    //    free(tmp);
+    //    tmp = next;
+    for (int i = 0; i < 5 && tmp != NULL; i++) {
         printWord(tmp);
         tmp = tmp->next;
-	i++;
-    }
-    while (tmp != NULL) {
-        word *next = tmp->next;
-        free(tmp);
-        tmp = next;
     }
 }
 
@@ -219,7 +222,7 @@ int main(int argc, char** argv) {
     chunkWords(file);
     //printTable();
     sort(); // likely final placement of sort
-    //freeTable();
+    freeTable();
     fclose(file);
     return 0;
 }
