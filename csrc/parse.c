@@ -83,35 +83,29 @@ void printTable() {
     }
 }
 
-void innerSort(word** array, word* w) {
-    if (array[0] == NULL) {
-        for (int n = 0; n < SORT_SIZE; n++) {
-            array[n] = w;
-        }
-    } else if (array[0]->instances <= w->instances) {
-        array[0] = w;
-        for (int n = 1; n < SORT_SIZE; n++) {
-            if (array[n]->instances < w->instances) {
-                continue;
-            }
-            array[n] = w;
-            break;
-        }
+void insertionSort(word** array, word* w, int i) {
+    int j = i - 1;
+    while (j >= 0 && array[j] > w) {
+        array[j + 1] = array[j];
+        j--;
     }
+    array[j + 1] = w;
 }
 
 void sort() {
-    word **array = (word**) malloc(sizeof(word*) * SORT_SIZE);
-    memset(array, 0, SORT_SIZE * sizeof(word*));
+    word **array = (word**) calloc(uniqueWords, sizeof(word*));
+    //memset(array, 0, SORT_SIZE * sizeof(word*));
+    int n = 0;
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
         if (hashTable[i] == NULL) continue;
         word *tmp = hashTable[i];
         while (tmp != NULL) {
-            innerSort(array, tmp);
+            n++;
+            insertionSort(array, tmp, n);
             tmp = tmp->next;
         }
     }
-    for (int i = 0; i < SORT_SIZE; i++) {
+    for (int i = 0; i < uniqueWords; i++) {
         printWord(array[i]);
     }
     free(array);
