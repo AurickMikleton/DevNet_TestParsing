@@ -100,7 +100,7 @@ word *bubbleSort(word *head) {
             // Temporary pointer to store the next
             // pointer of traverseNode
             word *ptr = traverseNode->next;
-            if (traverseNode->instances > ptr->instances) {
+            if (traverseNode->instances < ptr->instances) {
                 swapped = 1;
                 if (traverseNode == head) {
 
@@ -149,14 +149,10 @@ void sort() {
             first = tmp;
         }
 
-        puts("a");
         if (linkHead != NULL) {
             linkHead->next = tmp;
-            puts("b");
         }
-        puts("c");
         while (tmp != NULL) {
-            puts("d");
             prev = tmp;
             tmp = tmp->next;
         }
@@ -164,9 +160,16 @@ void sort() {
     }
     // test list
     word* tmp = bubbleSort(first);
-    while (tmp != NULL) {
+    int i = 0;
+    while (tmp != NULL && i > 5) {
         printWord(tmp);
         tmp = tmp->next;
+	i++;
+    }
+    while (tmp != NULL) {
+        word *next = tmp->next;
+        free(tmp);
+        tmp = next;
     }
 }
 
@@ -216,7 +219,7 @@ int main(int argc, char** argv) {
     chunkWords(file);
     //printTable();
     sort(); // likely final placement of sort
-    freeTable();
+    //freeTable();
     fclose(file);
     return 0;
 }
