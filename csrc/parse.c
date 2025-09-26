@@ -83,58 +83,58 @@ void printTable() {
     }
 }
 
-word *bubbleSort(word *head) {
-    word *currNode = head;
-    int len = uniqueWords;
-    int itr = 0;
-    int swapped;
+// Function to merge two sorted linked lists
+word* sorted_Merge(word* x, word* y) {
+    word* result = NULL;
 
-    // Iterating over the whole linked list
-    while (itr < len) {
-        word *traverseNode = head;
-        word *prevNode = head;
-        swapped = 0;
+    // Base cases for recursion
+    if (!x)
+        return y;
+    if (!y)
+        return x;
 
-        while (traverseNode->next != NULL) {
-
-            // Temporary pointer to store the next
-            // pointer of traverseNode
-            word *ptr = traverseNode->next;
-            if (traverseNode->instances < ptr->instances) {
-                swapped = 1;
-                if (traverseNode == head) {
-
-                    // Performing swap operations and
-                    // updating the head of the linked list
-                    traverseNode->next = ptr->next;
-                    ptr->next = traverseNode;
-                    prevNode = ptr;
-                    head = prevNode;
-                }
-                else {
-
-                    // Performing swap operation
-                    traverseNode->next = ptr->next;
-                    ptr->next = traverseNode;
-                    prevNode->next = ptr;
-                    prevNode = ptr;
-                }
-                continue;
-            }
-            prevNode = traverseNode;
-            traverseNode = traverseNode->next;
-        }
-
-        // If no swap occurred, break the loop
-        if (!swapped) {
-            break;
-        }
-
-        ++itr;
+    // Pick either node from x or y, and continue merging
+    if (x->instances >= y->instances) {
+        result = x;
+        result->next = sorted_Merge(x->next, y);
+    } else {
+        result = y;
+        result->next = sorted_Merge(x, y->next);
     }
+    return result;
+}
 
-    // Returning the head of the linked list
-    return head;
+// Function to find the middle of a linked list
+word* getMiddle(word* head) {
+    if (!head)
+        return head;
+
+    word *slow = head, *fast = head;
+    // Use slow and fast pointers to find the middle node
+    while (fast->next && fast->next->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow;
+}
+
+// Function implementing the merge sort algorithm for linked list
+word* mergeSort(word* head) {
+    if (!head || !head->next)
+        return head;
+
+    // Split the linked list into two halves
+    word *middle = getMiddle(head);
+    word *nextOfMiddle = middle->next;
+    middle->next = NULL;
+
+    // Recursively sort the two halves
+    word *left = mergeSort(head);
+    word *right = mergeSort(nextOfMiddle);
+
+    // Merge the sorted halves
+    word *sortedList = sorted_Merge(left, right);
+    return sortedList;
 }
 
 word *sort() {
@@ -152,7 +152,7 @@ word *sort() {
         }
         linkHead = prev;
     }
-    word* tmp = bubbleSort(first);
+    word* tmp = mergeSort(first);
     int i = 0;
     while (i < 5 && tmp != NULL) {
         if (false) continue; // check if word is on "banned list"
