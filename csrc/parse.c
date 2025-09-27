@@ -178,10 +178,10 @@ word *sort(FILE *bannedWordsList) {
     int i = 0;
     while (i < 5 && tmp != NULL) {
         if (banned(tmp->text, bannedWordsList)) {
-		tmp = tmp->next;
-		continue;
-	} // check if word is on "banned list"
-	rewind(bannedWordsList); // sets file pointer back to star
+            tmp = tmp->next;
+            continue;
+        } // check if word is on "banned list"
+        rewind(bannedWordsList); // sets file pointer back to start
         printWord(tmp);
         tmp = tmp->next;
         i++;
