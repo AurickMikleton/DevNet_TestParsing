@@ -96,12 +96,12 @@ bool banned(char *w, FILE *bannedList) {
 			isNotWord = false;
 			continue;
 		}
+		if (c == w[counter]) counter++;
+		else isNotWord = true;
 		if (c == ',') {
 			if (counter == wLength) return true;
 			counter = 0;
 		}
-		if (c == w[counter]) counter++;
-		else isNotWord = true;
 		if (counter > wLength) isNotWord = true;
 	}
 	return false;
