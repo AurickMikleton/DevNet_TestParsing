@@ -83,11 +83,34 @@ void printTable() {
     }
 }
 
-// Function to merge two sorted linked lists
+bool banned(char *w, FILE *bannedList) {
+	
+	int wLength = strlen(w);
+	int counter = 0;
+	char c;
+	bool isNotWord = false;
+
+	while ((c = fgetc(bannedList)) != EOF) {
+		if (isNotWord) {
+			if (c != ',') continue;
+			isNotWord = false;
+			continue;
+		}
+		if (c == ',') {
+			if (counter == wLength) return true;
+			counter = 0;
+		}
+		if (c == w[counter]) counter++;
+		else isNotWord = true;
+		if (counter > wLength) isNotWord = true;
+	}
+	return false;
+
+}
+
 word* sorted_Merge(word* x, word* y) {
     word* result = NULL;
 
-    // Base cases for recursion
     if (!x)
         return y;
     if (!y)
@@ -104,7 +127,6 @@ word* sorted_Merge(word* x, word* y) {
     return result;
 }
 
-// Function to find the middle of a linked list
 word* getMiddle(word* head) {
     if (!head)
         return head;
@@ -137,7 +159,7 @@ word* mergeSort(word* head) {
     return sortedList;
 }
 
-word *sort() {
+word *sort(FILE *bannedWordsList) {
     word* first = NULL;
     word* linkHead = NULL;
     word *prev = NULL;
@@ -155,7 +177,11 @@ word *sort() {
     word* tmp = mergeSort(first);
     int i = 0;
     while (i < 5 && tmp != NULL) {
-        if (false) continue; // check if word is on "banned list"
+        if (banned(tmp->text, bannedWordsList)) {
+		tmp = tmp->next;
+		continue;
+	} // check if word is on "banned list"
+	rewind(bannedWordsList); // sets file pointer back to star
         printWord(tmp);
         tmp = tmp->next;
         i++;
@@ -212,13 +238,15 @@ void chunkWords(FILE *file) {
 }
 
 int main(int argc, char** argv) {
-    FILE *file;
+    FILE *file, *csv;
     file = fopen(argv[1], "r");
-    if (file == NULL) return 1;
+    csv = fopen(argv[2], "r");
+    if (file == NULL || csv == NULL) return 1;
     chunkWords(file);
     fclose(file);
     //printTable();
-    word* first = sort();
+    word* first = sort(csv);
+    fclose(csv);
     freeList(first);
     //freeTable();
     return 0;
