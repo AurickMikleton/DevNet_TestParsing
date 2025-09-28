@@ -22,6 +22,7 @@ bool banned(char *w, FILE *bannedList) {
 	while ((c = fgetc(bannedList)) != EOF) {
 		if (isNotWord) {
 			if (c != ',') continue;
+            if (c != '\n') continue;
 			isNotWord = false;
 			continue;
 		}
