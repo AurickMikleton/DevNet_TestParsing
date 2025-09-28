@@ -148,16 +148,27 @@ bool endOfWord(char c) {
     return false;
 }
 
-void chunkWords(FILE *file) {
+void chunkWords(FILE *file) { //count one "***" as a word
     char currentWord[BUFFER_SIZE];
     char c;
     int i = 0;
+    bool textInBook = false;
+    int astriskTagCount = 0;
     while ((c = fgetc(file)) != EOF) {
         c = tolower(c);
+        currentWord[i] = '\0';
+        if (strcmp(currentWord, "***") == 0) {
+            astriskTagCount += 1;
+            if (textInBook) {
+                break;
+            }
+            else if (astriskTagCount > 1){
+                textInBook = true;
+            }
+        }
         if (endOfWord(c)) {
             if (i == 0) continue;
-            currentWord[i] = '\0';
-            hashTableAddWord(currentWord);
+            if (textInBook) hashTableAddWord(currentWord);
             i = 0;
             continue;
         }
