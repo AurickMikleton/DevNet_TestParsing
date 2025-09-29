@@ -4,6 +4,8 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <stdlib.h>
+#include <errno.h>
 
 #include "hashtable.c"
 #include "banlist.c"
@@ -75,8 +77,12 @@ void chunkWords(FILE *file) { //count one "***" as a word
 int main(int argc, char** argv) {
     FILE *file, *csv;
     file = fopen(argv[1], "r");
-    csv = fopen(argv[2], "r");
-    if (file == NULL || csv == NULL) return 1;
+    if (argc == 3) csv = fopen(argv[2], "r");
+    else csv = fopen("blankfile.txt", "r");
+    if (file == NULL || csv == NULL) {
+	perror("Error parsing file");
+	return EXIT_FAILURE;
+    }
     chunkWords(file);
     fclose(file);
     //printTable();
@@ -84,5 +90,5 @@ int main(int argc, char** argv) {
     fclose(csv);
     freeList(first);
     //freeTable();
-    return 0;
+    return EXIT_SUCCESS;
 }
