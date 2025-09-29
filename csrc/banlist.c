@@ -1,12 +1,12 @@
 #ifndef BANLIST_C
 #define BANLIST_C
 
-#include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 
 bool banned(char *w, FILE *bannedList) {
+	rewind(bannedList);
 	
 	int wLength = strlen(w);
 	int counter = 0;
@@ -15,13 +15,14 @@ bool banned(char *w, FILE *bannedList) {
 
 	while ((c = fgetc(bannedList)) != EOF) {
 		if (isNotWord) {
-			if (c != ',') continue;
+			if (c != ',' && c != '\n') continue;
 			isNotWord = false;
+			counter = 0;
 			continue;
 		}
 		if (c == w[counter]) counter++;
 		else isNotWord = true;
-		if (c == ',') {
+		if (c == ',' || c == '\n') {
 			if (counter == wLength) return true;
 			counter = 0;
 		}
