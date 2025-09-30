@@ -80,8 +80,8 @@ int main(int argc, char** argv) {
     if (argc == 3) csv = fopen(argv[2], "r");
     else csv = fopen("blankfile.txt", "r");
     if (file == NULL || csv == NULL) {
-	perror("Error parsing file");
-	return EXIT_FAILURE;
+        perror("Error parsing file");
+        return EXIT_FAILURE;
     }
     chunkWords(file);
     fclose(file);
