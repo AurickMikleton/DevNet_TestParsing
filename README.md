@@ -8,4 +8,16 @@ the statistics, essentially blacklisting them.
 
 ## Usage
 
-./parse (path to book) (CSV file)
+run with "Python SINEP_1.py"
+or "Python3 SINEP_1.py"
+
+#Valid Commands
+ parse <dir path>  Parse the text in the files within the provided directory"
+ stat <file path>  File to a csv 'banlist' print stats of parsed files"
+
+#Examples
+Python SINEP_1.py parse directory_of_books
+Python3 SINEP_1.py stat bannedwords.csv
+
+#Note
+Parse command must be run before the stats command is used in order to preprocess books
