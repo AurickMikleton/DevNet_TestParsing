@@ -16,7 +16,8 @@ void parse(FILE *file, char* name) { //count one "***" as a word
     FILE *newFile;
     char newFileName[256] = "parsed/";
     strcat(newFileName, name);
-    newFile = fopen("burito.txt", "w");
+    printf("%s \n", newFileName);
+    newFile = fopen(newFileName, "w");
     if (newFile == NULL) {
         perror("Error parsing file");
         return;
