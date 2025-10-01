@@ -4,9 +4,10 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #define BUFFER_SIZE 64 // longest english word is 45 letters, this is sufficient for reasonable cases
-#define HASH_TABLE_SIZE 1024 // bigger number = faster look ups and more memmory use
+#define HASH_TABLE_SIZE 2048 // bigger number = faster look ups and more memmory use
 #define FNV_PRIME 0x100000001b3
 #define FNV_OFFSET_BASIS 0xcbf29ce484222325
 
