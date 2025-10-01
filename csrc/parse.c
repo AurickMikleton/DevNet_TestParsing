@@ -16,7 +16,6 @@ void parse(FILE *file, char* name) { //count one "***" as a word
     FILE *newFile;
     char newFileName[256] = "parsed/";
     strcat(newFileName, name);
-    printf("%s \n", newFileName);
     newFile = fopen(newFileName, "w");
     if (newFile == NULL) {
         perror("Error parsing file");
@@ -60,7 +59,7 @@ int main(int argc, char** argv) {
         perror("Error parsing file");
         return EXIT_FAILURE;
     }
-    parse(file, argv[1]);
+    parse(file, argv[2]);
     fclose(file);
     return EXIT_SUCCESS;
 }

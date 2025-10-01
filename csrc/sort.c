@@ -4,6 +4,8 @@
 #include "hashtable.c"
 #include "banlist.c"
 
+int scentenceCount = 0;
+
 word* sorted_Merge(word* x, word* y) {
     word* result = NULL;
 
@@ -55,7 +57,7 @@ word* mergeSort(word* head) {
     return sortedList;
 }
 
-word *sort(FILE *bannedWordsList) {
+word *sort(FILE *bannedWordsList, char *name) {
     word* first = NULL;
     word* linkHead = NULL;
     word *prev = NULL;
@@ -72,16 +74,18 @@ word *sort(FILE *bannedWordsList) {
     }
     word* tmp = mergeSort(first);
     int i = 0;
+    printf("%s \\ ", name);
     while (i < 5 && tmp != NULL) {
         if (banned(tmp->text, bannedWordsList)) {
             tmp = tmp->next;
             continue;
         } // check if word is on "banned list"
         rewind(bannedWordsList); // sets file pointer back to start
-        printWord(tmp);
+        printf("%s ", tmp->text);
         tmp = tmp->next;
         i++;
     }
+    printf("\\ %d\n", wordCount/scentenceCount);
     return first;
 }
 

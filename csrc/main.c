@@ -13,7 +13,6 @@
 
 #define SORT_SIZE 5
 
-int scentenceCount = 0;
 
 void freeTable() {
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
@@ -54,18 +53,9 @@ void chunkWords(FILE *file) { //count one "***" as a word
     while ((c = fgetc(file)) != EOF) {
         c = tolower(c);
         currentWord[i] = '\0';
-        if (strcmp(currentWord, "***") == 0) {
-            astriskTagCount += 1;
-            if (textInBook) {
-                break;
-            }
-            else if (astriskTagCount > 1){
-                textInBook = true;
-            }
-        }
         if (endOfWord(c)) {
             if (i == 0) continue;
-            if (textInBook) hashTableAddWord(currentWord);
+            hashTableAddWord(currentWord);
             i = 0;
             continue;
         }
@@ -77,7 +67,7 @@ void chunkWords(FILE *file) { //count one "***" as a word
 int main(int argc, char** argv) {
     FILE *file, *csv;
     file = fopen(argv[1], "r");
-    if (argc == 3) csv = fopen(argv[2], "r");
+    if (argc == 4) csv = fopen(argv[2], "r");
     else csv = fopen("blankfile.txt", "r");
     if (file == NULL || csv == NULL) {
         perror("Error parsing file");
@@ -86,7 +76,7 @@ int main(int argc, char** argv) {
     chunkWords(file);
     fclose(file);
     //printTable();
-    word* first = sort(csv);
+    word* first = sort(csv, argv[3]);
     fclose(csv);
     freeList(first);
     //freeTable();
