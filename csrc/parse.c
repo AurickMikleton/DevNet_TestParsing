@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 
+#define _CRT_SECURE_NO_WARNINGS
 #define BUFFER_SIZE 64
 
 bool endOfWord(char c) {

@@ -7,12 +7,14 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "hashtable.c"
-#include "banlist.c"
-#include "sort.c"
+#include "hashtable.h"
+#include "banlist.h"
+#include "sort.h"
 
+#define _CRT_SECURE_NO_WARNINGS
 #define SORT_SIZE 5
 
+int scentenceCount = 0;
 
 void freeTable() {
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
@@ -45,6 +47,7 @@ bool endOfWord(char c) {
 }
 
 void chunkWords(FILE *file) { //count one "***" as a word
+    wordCount = 0;
     char currentWord[BUFFER_SIZE];
     char c;
     int i = 0;
@@ -76,7 +79,7 @@ int main(int argc, char** argv) {
     chunkWords(file);
     fclose(file);
     //printTable();
-    word* first = sort(csv, argv[3]);
+    word* first = sort(csv, argv[3], scentenceCount);
     fclose(csv);
     freeList(first);
     //freeTable();
