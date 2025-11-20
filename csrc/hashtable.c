@@ -1,26 +1,8 @@
-#ifndef HASHTABLE_C
-#define HASHTABLE_C
+#include "hashtable.h"
 
-#include <stdint.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#define BUFFER_SIZE 64 // longest english word is 45 letters, this is sufficient for reasonable cases
-#define HASH_TABLE_SIZE 2048 // bigger number = faster look ups and more memmory use
-#define FNV_PRIME 0x100000001b3
-#define FNV_OFFSET_BASIS 0xcbf29ce484222325
-
-int wordCount = 0;
 int uniqueWords = 0; // currently unused
-                     //
-typedef struct word {
-    char text[BUFFER_SIZE];
-    int instances; // use for word count
-    struct word *next;
-} word;
-
 word *hashTable[HASH_TABLE_SIZE];
+int wordCount = 0;
 
 word *makeWord(char* text) {
     word *output = (word*) malloc(sizeof(word));
@@ -78,5 +60,3 @@ void printTable() {
         }
     }
 }
-
-#endif

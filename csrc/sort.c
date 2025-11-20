@@ -1,10 +1,4 @@
-#ifndef SORT_C
-#define SORT_C
-
-#include "hashtable.c"
-#include "banlist.c"
-
-int scentenceCount = 0;
+#include "sort.h"
 
 word* sorted_Merge(word* x, word* y) {
     word* result = NULL;
@@ -57,7 +51,7 @@ word* mergeSort(word* head) {
     return sortedList;
 }
 
-word *sort(FILE *bannedWordsList, char *name) {
+word *sort(FILE *bannedWordsList, char *name, int scentenceCount) {
     word* first = NULL;
     word* linkHead = NULL;
     word *prev = NULL;
@@ -88,5 +82,3 @@ word *sort(FILE *bannedWordsList, char *name) {
     printf("\\ %d\n", wordCount/scentenceCount);
     return first;
 }
-
-#endif

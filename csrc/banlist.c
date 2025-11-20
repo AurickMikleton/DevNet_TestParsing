@@ -1,9 +1,4 @@
-#ifndef BANLIST_C
-#define BANLIST_C
-
-#include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
+#include "banlist.h"
 
 bool banned(char *w, FILE *bannedList) {
 	rewind(bannedList);
@@ -31,5 +26,3 @@ bool banned(char *w, FILE *bannedList) {
 	return false;
 
 }
-
-#endif
